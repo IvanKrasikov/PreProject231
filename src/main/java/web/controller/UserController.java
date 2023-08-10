@@ -4,20 +4,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import web.model.User;
-import web.service.UserServiceImpl;
+import web.service.UserService;
 
 @Controller
 public class UserController {
 
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
-    public UserController(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping(value = "/")
     public String usersPage(Model model) {
-        model.addAttribute("users", userServiceImpl.getAllUsers());
+        model.addAttribute("users", userService.getAllUsers());
         return "index";
     }
 
@@ -29,25 +29,25 @@ public class UserController {
 
     @PostMapping()
     public String addUser(@ModelAttribute("user") User user) {
-        userServiceImpl.addUser(user);
+        userService.addUser(user);
         return "redirect:/";
     }
 
     @GetMapping("/{id}/update")
     public String update(Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", userServiceImpl.getUser(id));
+        model.addAttribute("user", userService.getUser(id));
         return "update";
     }
 
     @PatchMapping("/{id}")
     public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") int id) {
-        userServiceImpl.updateUser(user);
+        userService.updateUser(user);
         return "redirect:/";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
-        userServiceImpl.removeUser(id);
+        userService.removeUser(id);
         return "redirect:/";
     }
 }
